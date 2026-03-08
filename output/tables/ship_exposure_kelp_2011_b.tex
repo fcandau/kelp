@@ -1,0 +1,26 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{4}{c}}
+\hline\hline
+                    &\multicolumn{2}{c}{Distance Traveled (km)} &\multicolumn{2}{c}{Vessel Count}           \\\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\
+                    &\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}&\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}\\
+\hline
+Post 2011 $\times$ Exposure&     -0.0925\sym{***}&     -0.0914\sym{***}&      -0.210\sym{***}&      -0.208\sym{***}\\
+                    &    (0.0288)         &    (0.0282)         &    (0.0433)         &    (0.0425)         \\
+[1em]
+SST                 &      -7.155\sym{***}&      -7.060\sym{***}&      -7.103\sym{***}&      -7.008\sym{***}\\
+                    &     (0.904)         &     (0.909)         &     (0.903)         &     (0.908)         \\
+[1em]
+Precipitation       &     -0.0359         &     -0.0386         &     -0.0483         &     -0.0508         \\
+                    &    (0.0781)         &    (0.0773)         &    (0.0782)         &    (0.0776)         \\
+[1em]
+Significant Wave Height&      -3.452\sym{***}&      -3.371\sym{***}&      -3.341\sym{***}&      -3.262\sym{***}\\
+                    &     (0.958)         &     (0.951)         &     (0.956)         &     (0.949)         \\
+\hline
+Cell FE             &         Yes         &         Yes         &         Yes         &         Yes         \\
+Year-Quarter FE     &         Yes         &         Yes         &         Yes         &         Yes         \\
+Observations        &        6000         &        6000         &        6000         &        6000         \\
+\hline\hline
+\end{tabular}
+}

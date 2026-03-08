@@ -1,0 +1,36 @@
+# Large data files
+data/raw/*.csv
+data/raw/*.tif
+data/raw/*.gpkg
+data/raw/*.nc
+data/raw/nbic/
+data/raw/knb-lter-sbc.74.16/
+data/raw/Marine_Protected_Areas_*/
+data/raw/impact_shipping/
+data/generated/
+
+# Stata intermediate
+*.dta
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Claude Code local settings
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*.synctex.gz
+*.fdb_latexmk
+*.fls

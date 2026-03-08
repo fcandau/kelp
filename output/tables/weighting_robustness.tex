@@ -1,0 +1,27 @@
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{4}{c}}
+\hline\hline
+                    &\multicolumn{2}{c}{Distance Traveled (km)}&\multicolumn{2}{c}{Vessel Count}\\
+                    \cmidrule(lr){2-3}\cmidrule(lr){4-5}
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\
+                    &\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}&\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}\\
+\hline
+\multicolumn{5}{l}{\textit{Panel A: Main specification (unweighted PPML)}}\\[0.3em]
+Post 2009 $\times$ Exposure&     0.1361\sym{***}&     0.1317\sym{***}&     0.1548\sym{***}&     0.1493\sym{***}\\
+                    &             (0.0359)&             (0.0352)&             (0.0432)&             (0.0424)\\
+Observations        &        3880         &        3880         &        3880         &        3880         \\
+[1em]
+\multicolumn{5}{l}{\textit{Panel B: Weighted by vessel count (offset trick)}}\\[0.3em]
+Post 2009 $\times$ Exposure&     0.1352\sym{***}&     0.1308\sym{***}&     0.1517\sym{***}&     0.1463\sym{***}\\
+                    &             (0.0372)&             (0.0366)&             (0.0446)&             (0.0439)\\
+Observations        &        3880         &        3880         &        3880         &        3880         \\
+[1em]
+\multicolumn{5}{l}{\textit{Panel C: Weighted by pre-period kelp biomass}}\\[0.3em]
+Post 2009 $\times$ Exposure&     0.1029\sym{***}&     0.0995\sym{***}&     0.1242\sym{***}&     0.1196\sym{***}\\
+                    &             (0.0296)&             (0.0286)&             (0.0382)&             (0.0365)\\
+Observations        &        3736         &        3736         &        3736         &        3736         \\
+Controls            &         Yes         &         Yes         &         Yes         &         Yes         \\
+Cell FE             &         Yes         &         Yes         &         Yes         &         Yes         \\
+Year-Quarter FE     &         Yes         &         Yes         &         Yes         &         Yes         \\
+\hline\hline
+\end{tabular}
