@@ -19,6 +19,16 @@ __pycache__/
 
 # Claude Code local settings
 .claude/
+CLAUDE.md
+
+# Paper folder
+paper/
+
+# Data archive
+data.zip
+
+# Scratch / working
+refine/
 
 # OS
 .DS_Store
@@ -34,3 +44,4 @@ Thumbs.db
 *.synctex.gz
 *.fdb_latexmk
 *.fls
+*.pdf
