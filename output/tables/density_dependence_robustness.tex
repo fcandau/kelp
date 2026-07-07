@@ -1,0 +1,16 @@
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{4}{c}}
+\hline\hline
+ &\multicolumn{2}{c}{Distance Traveled}&\multicolumn{2}{c}{Vessel Count}\\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+ &Biomass&Area&Biomass&Area\\
+\hline
+Baseline (main spec)                    &0.136{\sym{***}}&0.132{\sym{***}}&0.155{\sym{***}}&0.149{\sym{***}}\\
++ ln(baseline) $\times$ post            &0.103{\sym{***}}&0.099{\sym{***}}&0.114{\sym{***}}&0.109{\sym{***}}\\
++ baseline-quartile $\times$ post       &0.122{\sym{***}}&0.118{\sym{***}}&0.136{\sym{***}}&0.130{\sym{***}}\\
++ ln(baseline) $\times$ trend           &0.121{\sym{***}}&0.117{\sym{***}}&0.135{\sym{***}}&0.130{\sym{***}}\\
++ ln(baseline) $\times$ year FE         &0.084{\sym{**}}&0.080{\sym{**}}&0.095{\sym{**}}&0.090{\sym{**}}\\
+Low-baseline subsample                  &0.014{\sym{}}&0.012{\sym{}}&0.026{\sym{}}&0.023{\sym{}}\\
+High-baseline subsample                 &0.129{\sym{***}}&0.124{\sym{***}}&0.145{\sym{***}}&0.139{\sym{***}}\\
+\hline\hline
+\end{tabular}

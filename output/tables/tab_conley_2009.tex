@@ -1,0 +1,19 @@
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{4}{c}}
+\toprule
+                    &\multicolumn{2}{c}{Distance Traveled (km)}&\multicolumn{2}{c}{Vessel Count}\\
+                    \cmidrule(lr){2-3}\cmidrule(lr){4-5}
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\
+                    &\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}&\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}\\
+\midrule
+Post 2009 $\times$ Exposure&0.1361&0.1317&0.1548&0.1493\\
+\quad Cell-clustered SE&(0.0359)\sym{***}&(0.0352)\sym{***}&(0.0432)\sym{***}&(0.0424)\sym{***}\\
+\quad Conley SE (100 km)&[0.0405]\sym{***}&[0.0398]\sym{***}&[0.0478]\sym{***}&[0.0473]\sym{***}\\
+\quad Conley SE (200 km)&$\{$0.0296$\}$\sym{***}&$\{$0.0293$\}$\sym{***}&$\{$0.0370$\}$\sym{***}&$\{$0.0369$\}$\sym{***}\\
+\midrule
+Cell FE&Yes&Yes&Yes&Yes\\
+Year-Quarter FE&Yes&Yes&Yes&Yes\\
+Controls&Yes&Yes&Yes&Yes\\
+Observations&3880&3880&3880&3880\\
+\bottomrule
+\end{tabular}
