@@ -11,7 +11,7 @@
     2_c_anticipation.py    → Anticipation robustness (temporal stability, alt timing)
     2_e_weighting_robustness.py → Weighting diagnostic figure + table
     3_estim2011.do         → 2011 boundary modification PPML tables (Stata)
-    2_d_dechaisemartin.do  → de Chaisemartin & D'Haultfoeuille event study (Stata)
+    event_study_2011_ppml.py → PPML event study table for 2011 (Python)
     4_balance_table.py     → Balance table by treatment quartile
     5_financial_crisis.py  → Financial crisis robustness table + figure
 ==============================================================================*/
@@ -141,24 +141,21 @@ di as txt "Step 3 complete."
 
 
 * ==============================================================================
-*   Step 4: de Chaisemartin & D'Haultfoeuille event study (Stata)
-*   NOTE: This step runs 999 bootstrap replications and takes ~2 hours.
-*         It is neutralized by default. Uncomment the "do" line below to
-*         regenerate output/figures/event_study_2011_dCdH.png.
+*   Step 4: PPML event study for the 2011 boundary modification (Python)
 * ==============================================================================
 di as txt ""
 di as txt "============================================"
-di as txt "  Step 4: dCdH event study (2_d_dechaisemartin.do)"
-di as txt "  *** SKIPPED (slow — uncomment to run) ***"
+di as txt "  Step 4: 2011 event study (event_study_2011_ppml.py)"
 di as txt "============================================"
 
-* do "$code\2_d_dechaisemartin.do"
+shell "$python" "$code\event_study_2011_ppml.py"
 
-cap confirm file "$output\figures\event_study_2011_dCdH.png"
+cap confirm file "$output\tables\tab_es_2011.tex"
 if _rc {
-    di as error "WARNING: event_study_2011_dCdH.png not found."
+    di as error "ERROR: tab_es_2011.tex not found. Step 4 failed."
+    error 601
 }
-di as txt "Step 4 complete (skipped)."
+di as txt "Step 4 complete."
 
 
 * ==============================================================================
@@ -211,7 +208,7 @@ di as txt "Main-text outputs:"
 di as txt "  $output\tables\ship_exposure_kelp_2009_main.tex"
 di as txt "  $output\figures\event_study_main.png"
 di as txt "  $output\tables\ship_exposure_kelp_2011_b.tex"
-di as txt "  $output\figures\event_study_2011_dCdH.png"
+di as txt "  $output\tables\tab_es_2011.tex"
 di as txt ""
 di as txt "Appendix outputs:"
 di as txt "  $output\tables\cdid_weighted.tex"

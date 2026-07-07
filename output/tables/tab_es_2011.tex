@@ -1,0 +1,40 @@
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{2}{c}}
+\hline\hline
+ &\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}\\
+\hline
+\multicolumn{3}{l}{\emph{Pre-2009 window (parallel-trends check)}}\\
+2005 &0.090\sym{}&0.096\sym{}\\
+ &(0.113)&(0.113)\\
+2006 &0.040\sym{}&0.049\sym{}\\
+ &(0.132)&(0.131)\\
+2007 &0.011\sym{}&0.012\sym{}\\
+ &(0.097)&(0.097)\\
+2008 &-0.056\sym{}&-0.049\sym{}\\
+ &(0.117)&(0.116)\\
+\quad Joint 2005--2008 test ($p$-value) &0.43&0.39\\
+[0.4em]
+\multicolumn{3}{l}{\emph{2009 fuel-rule phase-in}}\\
+2009 &-0.407\sym{***}&-0.401\sym{***}\\
+ &(0.088)&(0.089)\\
+2010 &-0.187\sym{**}&-0.181\sym{**}\\
+ &(0.091)&(0.091)\\
+\quad 2011 (reference) &---&---\\
+[0.4em]
+\multicolumn{3}{l}{\emph{Post-2011 boundary modification}}\\
+2012 &-0.244\sym{***}&-0.242\sym{***}\\
+ &(0.082)&(0.081)\\
+2013 &-0.174\sym{*}&-0.164\sym{*}\\
+ &(0.099)&(0.099)\\
+2014 &-0.479\sym{***}&-0.478\sym{***}\\
+ &(0.119)&(0.120)\\
+2015 &-0.330\sym{***}&-0.323\sym{**}\\
+ &(0.128)&(0.128)\\
+2016 &-0.327\sym{**}&-0.315\sym{**}\\
+ &(0.152)&(0.152)\\
+\hline
+Cell FE &Yes&Yes\\
+Year-Quarter FE &Yes&Yes\\
+Observations &6000&6000\\
+\hline\hline
+\end{tabular}
