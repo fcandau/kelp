@@ -1,12 +1,24 @@
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
-\begin{tabular}{llccc}
+\begin{tabular}{l*{4}{c}}
 \hline\hline
-Treatment & Outcome & Level effect & Linear ACR & ACR-implied \\
-          &         & (top vs bottom) & coef.\ & (top vs bottom) \\
+ &\multicolumn{2}{c}{Distance Traveled}&\multicolumn{2}{c}{Vessel Count}\\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+ &\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}&\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}\\
 \hline
-Distance Traveled & Biomass & 0.413\sym{***} & 0.136 & 0.509 \\
-Distance Traveled & Area & 0.400\sym{***} & 0.132 & 0.492 \\
-Vessel Count & Biomass & 0.390\sym{***} & 0.155 & 0.497 \\
-Vessel Count & Area & 0.379\sym{***} & 0.149 & 0.479 \\
+\multicolumn{5}{l}{\emph{Panel A: Exposure terciles (base = lowest tercile)}}\\
+Middle tercile        &0.598\sym{***}&0.585\sym{***}&0.275\sym{*}&0.266\sym{}\\
+                      &(0.105)&(0.104)&(0.165)&(0.162)\\
+Top tercile           &0.413\sym{***}&0.400\sym{***}&0.390\sym{***}&0.379\sym{***}\\
+                      &(0.151)&(0.150)&(0.146)&(0.144)\\
+[0.4em]
+\multicolumn{5}{l}{\emph{Panel B: Exposure quartiles (base = lowest quartile)}}\\
+Second quartile       &0.109\sym{}&0.110\sym{}&0.057\sym{}&0.058\sym{}\\
+                      &(0.186)&(0.185)&(0.167)&(0.166)\\
+Third quartile        &0.541\sym{***}&0.522\sym{***}&0.526\sym{***}&0.507\sym{***}\\
+                      &(0.146)&(0.144)&(0.146)&(0.144)\\
+Top quartile          &0.379\sym{***}&0.367\sym{***}&0.365\sym{**}&0.352\sym{**}\\
+                      &(0.143)&(0.142)&(0.143)&(0.142)\\
+\hline
+Linear coefficient&0.136&0.132&0.155&0.149\\
 \hline\hline
 \end{tabular}

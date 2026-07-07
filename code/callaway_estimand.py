@@ -18,16 +18,15 @@ This script does three things and touches NOTHING in the numbered pipeline:
   2. NONPARAMETRIC DOSE-RESPONSE: partitions cells into dosage groups (terciles;
      quartiles as robustness), interacts group dummies with the post-2009 indicator,
      and estimates group-specific post effects with the lowest-dosage group as base.
-     If the group effects rise monotonically with dosage, the linear coefficient is
-     not a functional-form artifact.
+     If the group effects rise with dosage, the linear coefficient is not a
+     functional-form artifact.
   3. AVERAGE LEVEL EFFECT: the top-vs-bottom dosage-group coefficient (identified
      under ordinary parallel trends), contrasted with the linear ACR coefficient
      (the linear model's implied top-vs-bottom prediction is computed for comparison).
 
 Outputs:
-  output/figures/fig_doseresponse_2009.png   (iplot-style, 2x2 panels, terciles)
   output/csv/doseresponse_2009.csv            (all group effects, terciles + quartiles)
-  output/tables/tab_doseresponse_2009.tex     (compact level-effect vs ACR table)
+  output/tables/tab_doseresponse_2009.tex     (group-specific dose-response table)
 
 Unweighted PPML throughout, SEs clustered at the cell level (matches main spec).
 Python: pyfixest. Run with the r-env interpreter.
@@ -37,18 +36,14 @@ import os
 import numpy as np
 import pandas as pd
 import pyfixest as pf
-import matplotlib.pyplot as plt
-from scipy import stats as scipy_stats
 import warnings
 warnings.filterwarnings("ignore")
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GENERATED = os.path.join(BASE, "data", "generated")
 TABLE_DIR = os.path.join(BASE, "output", "tables")
-FIG_DIR = os.path.join(BASE, "output", "figures")
 CSV_DIR = os.path.join(BASE, "output", "csv")
 os.makedirs(TABLE_DIR, exist_ok=True)
-os.makedirs(FIG_DIR, exist_ok=True)
 os.makedirs(CSV_DIR, exist_ok=True)
 
 VCOV = {"CRV1": "cell_id"}
@@ -240,7 +235,7 @@ print("=" * 78 + "\n")
 
 
 # ---------------------------------------------------------------------------
-# STEP 3 -- Top-vs-bottom level effect vs the linear ACR prediction
+# STEP 3 -- Top-vs-bottom level effect vs the linear ACR prediction (printed)
 # ---------------------------------------------------------------------------
 print("=" * 78)
 print("STEP 3  Average LEVEL effect (top vs bottom group) vs linear ACR")
@@ -248,7 +243,6 @@ print("=" * 78)
 print("Nonparametric top-vs-bottom = coef on highest dosage group (ref=lowest).")
 print("Linear-implied top-vs-bottom = ACR_coef * (mean exposure gap top-bottom).\n")
 
-level_rows = []
 for n_groups, gname in [(3, "tercile"), (4, "quartile")]:
     for tvar, tlab in TREATS:
         for yvar, ylab in OUTCOMES:
@@ -257,101 +251,52 @@ for n_groups, gname in [(3, "tercile"), (4, "quartile")]:
             bot = res[res["group"] == 1].iloc[0]
             gap = top["mean_exposure"] - bot["mean_exposure"]
             acr = linear_coef[(tvar, yvar)]["coef"]
-            implied = acr * gap
-            level_rows.append({
-                "partition": gname, "treatment": tlab, "outcome": ylab,
-                "nonparam_top_vs_bottom": top["coef"],
-                "np_se": top["se"], "np_p": top["p"],
-                "exposure_gap": gap,
-                "linear_acr": acr,
-                "linear_implied_top_vs_bottom": implied,
-            })
             print(f"[{gname}] {ylab} x {tlab}:")
             print(f"    nonparametric top-vs-bottom = {top['coef']:.4f} "
                   f"(se {top['se']:.4f}, p {top['p']:.3f} {stars(top['p'])})")
             print(f"    linear ACR                  = {acr:.4f}  "
-                  f"x  exposure gap {gap:.2f}  =  {implied:.4f} (implied)")
+                  f"x  exposure gap {gap:.2f}  =  {acr * gap:.4f} (implied)")
             print()
-
-level_df = pd.DataFrame(level_rows)
 print("=" * 78 + "\n")
 
 
 # ---------------------------------------------------------------------------
-# Compact LaTeX table (tercile level effect vs ACR)
+# LaTeX table -- group-specific dose-response (terciles Panel A, quartiles Panel B)
 # ---------------------------------------------------------------------------
-tl = level_df[level_df["partition"] == "tercile"].copy()
-lines = []
-lines.append(r"\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}")
-lines.append(r"\begin{tabular}{llccc}")
-lines.append(r"\hline\hline")
-lines.append(r"Treatment & Outcome & Level effect & Linear ACR & ACR-implied \\")
-lines.append(r"          &         & (top vs bottom) & coef.\ & (top vs bottom) \\")
-lines.append(r"\hline")
-for _, r in tl.iterrows():
-    st = stars(r["np_p"])
-    sym = f"\\sym{{{st}}}" if st else ""
-    lines.append(f"{r['treatment']} & {r['outcome']} & "
-                 f"{r['nonparam_top_vs_bottom']:.3f}{sym} & "
-                 f"{r['linear_acr']:.3f} & "
-                 f"{r['linear_implied_top_vs_bottom']:.3f} \\\\")
-lines.append(r"\hline\hline")
-lines.append(r"\end{tabular}")
+COLORDER = [(TREATS[0][0], OUTCOMES[0][0]), (TREATS[0][0], OUTCOMES[1][0]),
+            (TREATS[1][0], OUTCOMES[0][0]), (TREATS[1][0], OUTCOMES[1][0])]
+
+
+def _grp_row(label, n_groups, g):
+    coefs, ses = [], []
+    for tv, yv in COLORDER:
+        rr = dr_results[(tv, yv, n_groups)]
+        r = rr[rr["group"] == g].iloc[0]
+        st = "" if pd.isna(r["p"]) else stars(r["p"])
+        coefs.append(f"{r['coef']:.3f}\\sym{{{st}}}")
+        ses.append("" if pd.isna(r["se"]) else f"({r['se']:.3f})")
+    cline = f"{label:<22}" + "".join(f"&{c}" for c in coefs) + r"\\"
+    sline = " " * 22 + "".join(f"&{c}" for c in ses) + r"\\"
+    return [cline, sline]
+
+
+L = [r"\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}",
+     r"\begin{tabular}{l*{4}{c}}", r"\hline\hline",
+     r" &\multicolumn{2}{c}{Distance Traveled}&\multicolumn{2}{c}{Vessel Count}\\",
+     r"\cmidrule(lr){2-3}\cmidrule(lr){4-5}",
+     r" &\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}&\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}\\",
+     r"\hline",
+     r"\multicolumn{5}{l}{\emph{Panel A: Exposure terciles (base = lowest tercile)}}\\"]
+L += _grp_row("Middle tercile", 3, 2) + _grp_row("Top tercile", 3, 3) + ["[0.4em]"]
+L += [r"\multicolumn{5}{l}{\emph{Panel B: Exposure quartiles (base = lowest quartile)}}\\"]
+L += _grp_row("Second quartile", 4, 2) + _grp_row("Third quartile", 4, 3) + _grp_row("Top quartile", 4, 4)
+L += [r"\hline",
+      "Linear coefficient" + "".join(f"&{linear_coef[(t, y)]['coef']:.3f}" for t, y in COLORDER) + r"\\",
+      r"\hline\hline", r"\end{tabular}"]
+
 tab_path = os.path.join(TABLE_DIR, "tab_doseresponse_2009.tex")
 with open(tab_path, "w", encoding="utf-8") as f:
-    f.write("\n".join(lines))
-print(f"Saved compact LaTeX table -> {tab_path}")
-
-
-# ---------------------------------------------------------------------------
-# Figure -- iplot-style dose-response (terciles), 2x2 panels
-# ---------------------------------------------------------------------------
-fig, axes = plt.subplots(2, 2, figsize=(11, 9))
-panel_idx = 0
-for i, (tvar, tlab) in enumerate(TREATS):
-    for j, (yvar, ylab) in enumerate(OUTCOMES):
-        ax = axes[i, j]
-        res = dr_results[(tvar, yvar, 3)].sort_values("group")
-        x = res["group"].values
-        y = res["coef"].values
-        lo = res["ci_low"].values
-        hi = res["ci_high"].values
-
-        # reference group point (group 1, coef=0, no CI)
-        ax.errorbar(x[0], y[0], yerr=None, fmt="s", color="black",
-                    markersize=7, zorder=5)
-        # non-reference groups with 95% CIs
-        yerr = np.vstack([y[1:] - lo[1:], hi[1:] - y[1:]])
-        ax.errorbar(x[1:], y[1:], yerr=yerr, fmt="o", color="#1f4e79",
-                    ecolor="#1f4e79", elinewidth=1.6, capsize=4,
-                    markersize=7, zorder=5)
-
-        # linear ACR prediction across the group mean-exposure grid (anchored at G1=0)
-        acr = linear_coef[(tvar, yvar)]["coef"]
-        base_exp = res["mean_exposure"].values[0]
-        pred = acr * (res["mean_exposure"].values - base_exp)
-        ax.plot(x, pred, "--", color="#c0392b", linewidth=1.4,
-                label=f"Linear ACR (β={acr:.3f})", zorder=3)
-
-        ax.axhline(0, color="grey", linewidth=0.8, linestyle=":")
-        ax.set_xticks(x)
-        ax.set_xticklabels([f"G{int(g)}\n(mean {m:.1f})"
-                            for g, m in zip(res["group"], res["mean_exposure"])],
-                           fontsize=8)
-        ax.set_title(f"{chr(65+panel_idx)}. {ylab} – {tlab}", fontsize=11)
-        ax.set_xlabel("Dosage tercile (low → high)", fontsize=9)
-        ax.set_ylabel("Post-2009 level effect vs G1", fontsize=9)
-        ax.legend(fontsize=8, loc="upper left", frameon=False)
-        panel_idx += 1
-
-fig.suptitle("Nonparametric dose-response: group-specific post-2009 effects (PPML)\n"
-             "Points = ATT-type level effects (base = lowest-dosage tercile, 95% CI); "
-             "dashed = linear ACR prediction",
-             fontsize=12, y=1.00)
-fig.tight_layout(rect=[0, 0, 1, 0.97])
-fig_path = os.path.join(FIG_DIR, "fig_doseresponse_2009.png")
-fig.savefig(fig_path, dpi=300, bbox_inches="tight")
-plt.close(fig)
-print(f"Saved dose-response figure -> {fig_path}")
+    f.write("\n".join(L))
+print(f"Saved group-specific dose-response table -> {tab_path}")
 
 print("\nDone.")
