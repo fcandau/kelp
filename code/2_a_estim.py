@@ -144,7 +144,7 @@ lines = []
 lines.append(r"\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}")
 lines.append(r"\begin{tabular}{l*{4}{c}}")
 lines.append(r"\hline\hline")
-lines.append(r"                    &\multicolumn{2}{c}{Distance Traveled (km)}&\multicolumn{2}{c}{Vessel Count}\\")
+lines.append(r"                    &\multicolumn{2}{c}{Distance Traveled}&\multicolumn{2}{c}{Vessel Count}\\")
 lines.append(r"                    \cmidrule(lr){2-3}\cmidrule(lr){4-5}")
 lines.append(r"                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\")
 lines.append(r"                    &\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}&\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}\\")
@@ -240,9 +240,9 @@ df["FE_t"] = df["yq"]
 # Clean x-axis labels: iplot uses 0-indexed positions for the i() coefficients.
 # Periods in sorted order: 2005, 2006, 2007, 2009.1, 2009.2, 2010, ..., 2016
 # That's 12 coefficients (2008 is the omitted reference).
-TICK_LABELS = ["2005", "2006", "2007", "09H1", "09H2",
+TICK_LABELS = ["2005", "2006", "2007", "2009Q1–Q2", "2009Q3–Q4",
                "2010", "2011", "2012", "2013", "2014", "2015", "2016"]
-# Treatment line between 2007 (index 2) and 09H1 (index 3)
+# Line separates the pre-policy years from 2009: between 2007 (index 2) and 2009Q1-Q2 (index 3)
 TREAT_XINTERCEPT = 2.5
 
 
@@ -273,7 +273,8 @@ def annotate_pretrend(ax, est):
 
 def style_es_axis(ax, title, tick_labels=TICK_LABELS):
     """Apply consistent styling to an event study axis."""
-    ax.set_xticklabels(tick_labels, fontsize=8, rotation=45)
+    ax.set_xticklabels(tick_labels, fontsize=8, rotation=45,
+                       ha="right", rotation_mode="anchor")
     ax.set_title(title, fontsize=11)
     ax.set_xlabel("Year", fontsize=10)
     ax.set_ylabel("Coefficient", fontsize=10)
@@ -393,7 +394,7 @@ lines_w = []
 lines_w.append(r"\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}")
 lines_w.append(r"\begin{tabular}{l*{4}{c}}")
 lines_w.append(r"\hline\hline")
-lines_w.append(r"                    &\multicolumn{2}{c}{Distance Traveled (km)}&\multicolumn{2}{c}{Vessel Count}\\")
+lines_w.append(r"                    &\multicolumn{2}{c}{Distance Traveled}&\multicolumn{2}{c}{Vessel Count}\\")
 lines_w.append(r"                    \cmidrule(lr){2-3}\cmidrule(lr){4-5}")
 lines_w.append(r"                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\")
 lines_w.append(r"                    &\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}&\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}\\")
@@ -528,7 +529,7 @@ plines = []
 plines.append(r"\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}")
 plines.append(r"\begin{tabular}{l*{4}{c}}")
 plines.append(r"\hline\hline")
-plines.append(r"                    &\multicolumn{2}{c}{Distance Traveled (km)}&\multicolumn{2}{c}{Vessel Count}\\")
+plines.append(r"                    &\multicolumn{2}{c}{Distance Traveled}&\multicolumn{2}{c}{Vessel Count}\\")
 plines.append(r"                    \cmidrule(lr){2-3}\cmidrule(lr){4-5}")
 plines.append(r"                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\")
 plines.append(r"                    &\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}&\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}\\")

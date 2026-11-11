@@ -390,7 +390,7 @@ tex_lines = []
 tex_lines.append(r"\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}")
 tex_lines.append(r"\begin{tabular}{l*{4}{c}}")
 tex_lines.append(r"\hline\hline")
-tex_lines.append(r"                    &\multicolumn{2}{c}{Distance Traveled (km)}&\multicolumn{2}{c}{Vessel Count}\\")
+tex_lines.append(r"                    &\multicolumn{2}{c}{Distance Traveled}&\multicolumn{2}{c}{Vessel Count}\\")
 tex_lines.append(r"                    \cmidrule(lr){2-3}\cmidrule(lr){4-5}")
 tex_lines.append(r"                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\")
 tex_lines.append(r"                    &\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}&\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}\\")

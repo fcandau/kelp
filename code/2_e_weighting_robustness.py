@@ -266,7 +266,7 @@ lines = []
 lines.append(r"\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}")
 lines.append(r"\begin{tabular}{l*{4}{c}}")
 lines.append(r"\hline\hline")
-lines.append(r"                    &\multicolumn{2}{c}{Distance Traveled (km)}"
+lines.append(r"                    &\multicolumn{2}{c}{Distance Traveled}"
              r"&\multicolumn{2}{c}{Vessel Count}\\")
 lines.append(r"                    \cmidrule(lr){2-3}\cmidrule(lr){4-5}")
 lines.append(r"                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}"

@@ -122,7 +122,7 @@ esttab col1 col2 col3 col4
 	           ln_sst "SST"
 	           ln_precipitation "Precipitation"
 	           ln_swh "Significant Wave Height")
-	mgroups("Distance Traveled (km)" "Vessel Count",
+	mgroups("Distance Traveled" "Vessel Count",
 	        pattern(1 0 1 0)
 	        prefix(\multicolumn{@span}{c}{)
 	        suffix(})
@@ -215,7 +215,7 @@ esttab col1w col2w col3w col4w
 	           ln_sst "SST"
 	           ln_precipitation "Precipitation"
 	           ln_swh "Significant Wave Height")
-	mgroups("Distance Traveled (km)" "Vessel Count",
+	mgroups("Distance Traveled" "Vessel Count",
 	        pattern(1 0 1 0)
 	        prefix(\multicolumn{@span}{c}{)
 	        suffix(})
@@ -301,7 +301,7 @@ esttab r1 r2 r3 r4
 	           ln_sst "SST"
 	           ln_precipitation "Precipitation"
 	           ln_swh "Significant Wave Height")
-	mgroups("Distance Traveled (km)" "Vessel Count",
+	mgroups("Distance Traveled" "Vessel Count",
 	        pattern(1 0 1 0)
 	        prefix(\multicolumn{@span}{c}{)
 	        suffix(})

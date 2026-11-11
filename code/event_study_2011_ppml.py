@@ -5,7 +5,7 @@ correctly dated to the modification (post = 2012, since it took effect December
 
 Design.  Continuous DiD in PPML: annual year dummies interacted with the
 time-invariant 2011 pre-modification vessel-count exposure, cell + year-quarter FE,
-SEs clustered at the cell level, on the 125-cell 2011 sample (as in 3_estim2011.do).
+SEs clustered at the cell level, on the 127-cell 2011 sample (as in 3_estim2011.do).
 The modification took effect December 2011, so 2011 is the omitted reference year
 (ref=2011): 2005-2010 are pre-trends, 2012-2016 are post-modification effects.
 
@@ -76,7 +76,7 @@ need = (["biomass_sum", "area_sum", "ln_sst", "ln_precipitation", "ln_swh"]
         + list(EXP2011.values()) + list(EXP2009.values()))
 df = df.dropna(subset=need)
 print(f"[2011 sample] {len(df)} obs, {df['cell_id'].nunique()} cells "
-      f"(main-table 2011 spec = 125 cells / 6000 obs)")
+      f"(main-table 2011 spec = 127 cells / 6000 obs)")
 
 
 def event_study(depvar, t, control_2009):
@@ -180,4 +180,45 @@ with open(out, "w") as f:
     f.write("\n".join(L) + "\n")
 print(f"\nSaved {out}")
 print(f"  pre-2009 joint test: biomass p={p_bio:.2f}, area p={p_area:.2f} (flat = good)")
+
+# ---- Same estimates, three stacked panels: years in columns, one line per outcome ----
+# (used by paper/Kelp.tex; fixed effects and observations go in the note)
+NCOL = 5  # year columns per panel (the longest panel, 2012-2016, has five)
+
+
+def panel(title, years, extra_head=None, extra=None):
+    """One panel: title, year header, then coefficient and SE lines for biomass and area."""
+    pad = NCOL - len(years) - (1 if extra_head else 0)
+    head = [str(y) for y in years] + ([extra_head] if extra_head else []) + [""] * pad
+    used = len(years) + (1 if extra_head else 0)
+    lines = [rf"\multicolumn{{{NCOL + 1}}}{{l}}{{\emph{{{title}}}}}\\[0.3em]",
+             " & " + " & ".join(head) + r"\\",
+             rf"\cmidrule(lr){{2-{used + 1}}}"]
+    for label, d, p_joint in (("Biomass", bio, p_bio), ("Area", area, p_area)):
+        coefs = [f"{d.loc[y].coef:.3f}\\sym{{{stars(d.loc[y].p)}}}" for y in years]
+        ses = [f"({d.loc[y].se:.3f})" for y in years]
+        if extra_head:
+            coefs.append(f"{p_joint:.2f}")
+            ses.append("")
+        coefs += [""] * pad
+        ses += [""] * pad
+        lines.append(f"{label} & " + " & ".join(coefs) + r"\\")
+        lines.append(" & " + " & ".join(ses) + r"\\")
+    return lines
+
+
+W = [r"\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}",
+     rf"\begin{{tabular}}{{l*{{{NCOL}}}{{c}}}}",
+     r"\hline\hline"]
+W += panel("Panel A: Before both policies", [2005, 2006, 2007, 2008],
+           extra_head=r"Joint test ($p$)")
+W.append(r"[0.6em]")
+W += panel("Panel B: 2009 fuel rule", [2009, 2010])
+W.append(r"[0.6em]")
+W += panel("Panel C: After the 2011 modification", [2012, 2013, 2014, 2015, 2016])
+W += [r"\hline\hline", r"\end{tabular}"]
+out_wide = os.path.join(TABLES_DIR, "tab_es2011_panels.tex")
+with open(out_wide, "w") as f:
+    f.write("\n".join(W) + "\n")
+print(f"Saved {out_wide}  (N = {N_bio}; joint 2005-2008 p = {p_bio:.2f} / {p_area:.2f})")
 print("DONE.")

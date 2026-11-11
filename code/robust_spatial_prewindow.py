@@ -28,7 +28,6 @@ BEFORE the Dec-2011 boundary change). Same FE, controls, clustering.
 Outputs:
   output/csv/robust_spatial_se.csv
   output/csv/robust_prewindow.csv
-  output/tables/tab_spatialse_2009.tex
   output/tables/tab_prewindow_2009.tex
 """
 
@@ -238,55 +237,10 @@ col_order = [(d, t) for d, _, t, _ in
               ("Biomass", None, "Count", None), ("Area", None, "Count", None)]]
 
 
-def find_row(dlab, tlab):
-    m = res1[(res1["outcome"] == dlab) & (res1["treatment"] == tlab)]
-    return m.iloc[0]
-
-
-L = []
-L.append(r"\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}")
-L.append(r"\begin{tabular}{l*{4}{c}}")
-L.append(r"\hline\hline")
-L.append(r" &\multicolumn{2}{c}{Distance Traveled (km)}&\multicolumn{2}{c}{Vessel Count}\\")
-L.append(r"\cmidrule(lr){2-3}\cmidrule(lr){4-5}")
-L.append(r" &\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}&\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}\\")
-L.append(r"\hline")
-
-# point estimate row
-line = r"Post 2009 $\times$ Exposure"
-for dlab, tlab in col_order:
-    r = find_row(dlab, tlab)
-    line += f" & {r['coef']:.4f}"
-L.append(line + r"\\")
-L.append(r"[0.3em]")
-
-gcell = df["cell_id"].nunique()
-gtime = df["yq"].nunique()
-se_label = {
-    "cell_id": f"Cell cluster, baseline ($G={gcell}$)",
-    "cell_id + yq": f"Two-way: cell $\\times$ year-qtr ($G={gcell},{gtime}$)",
-    "lat_band_025": f"Lat band $0.25^\\circ$ ($G={df['lat_band_025'].nunique()}$)",
-    "lat_band_05": f"Lat band $0.50^\\circ$ ($G={df['lat_band_05'].nunique()}$)",
-    "lat_band_10": f"Lat band $1.00^\\circ$ ($G={df['lat_band_10'].nunique()}$)",
-    "sp_kmeans": f"KMeans spatial ($k={K_KMEANS}$)",
-}
-for cvar, _ in CLUSTER_SCHEMES:
-    lab = se_label[cvar]
-    line = f"\\quad {lab}"
-    for dlab, tlab in col_order:
-        r = find_row(dlab, tlab)
-        se = r[f"se__{cvar}"]
-        p = r[f"p__{cvar}"]
-        line += f" & ({se:.4f})\\sym{{{stars(p)}}}"
-    L.append(line + r"\\")
-
-L.append(r"\hline")
-L.append(f"Observations & {len(df)} & {len(df)} & {len(df)} & {len(df)}" + r"\\")
-L.append(r"\hline\hline")
-L.append(r"\end{tabular}")
-with open(os.path.join(TABLE_DIR, "tab_spatialse_2009.tex"), "w", encoding="utf-8") as f:
-    f.write("\n".join(L))
-print(f"Saved {os.path.join(TABLE_DIR, 'tab_spatialse_2009.tex')}")
+# The spatial / two-way-clustering table (tab_spatialse_2009.tex) is NOT used in the
+# paper: the Spatial Correlation appendix reports the Conley table only, because the
+# few-cluster rows (G=3,5) are a small-G artifact rather than evidence. The clustered
+# SEs are still estimated above (res1); no LaTeX table is written.
 
 # ---------------------------------------------------------------------------
 # LaTeX table -- CHECK 2 (pre-2011 window)
@@ -300,7 +254,7 @@ L2 = []
 L2.append(r"\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}")
 L2.append(r"\begin{tabular}{l*{4}{c}}")
 L2.append(r"\hline\hline")
-L2.append(r" &\multicolumn{2}{c}{Distance Traveled (km)}&\multicolumn{2}{c}{Vessel Count}\\")
+L2.append(r" &\multicolumn{2}{c}{Distance Traveled}&\multicolumn{2}{c}{Vessel Count}\\")
 L2.append(r"\cmidrule(lr){2-3}\cmidrule(lr){4-5}")
 L2.append(r" &\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}&\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}\\")
 L2.append(r"\hline")

@@ -222,7 +222,7 @@ alines = []
 alines.append(r"\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}")
 alines.append(r"\begin{tabular}{l*{4}{c}}")
 alines.append(r"\hline\hline")
-alines.append(r"                    &\multicolumn{2}{c}{Distance Traveled (km)}&\multicolumn{2}{c}{Vessel Count}\\")
+alines.append(r"                    &\multicolumn{2}{c}{Distance Traveled}&\multicolumn{2}{c}{Vessel Count}\\")
 alines.append(r"                    \cmidrule(lr){2-3}\cmidrule(lr){4-5}")
 alines.append(r"                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\")
 alines.append(r"                    &\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}&\multicolumn{1}{c}{Biomass}&\multicolumn{1}{c}{Area}\\")
@@ -457,29 +457,10 @@ corr_df = pd.DataFrame(corr_results)
 corr_df.to_csv(os.path.join(CSV_DIR, "treatment_correlation_2009_2011.csv"), index=False)
 print(f"\nSaved treatment_correlation_2009_2011.csv")
 
-# Generate scatter plot
-fig3, axes3 = plt.subplots(1, 2, figsize=(10, 4.5))
-for ax, (var09, var11, label), res in zip(axes3, corr_pairs, corr_results):
-    valid = cell_df[[var09, var11]].dropna()
-    valid = valid[(valid[var09] > 0) & (valid[var11] > 0)]
-    ax.scatter(valid[var09], valid[var11], alpha=0.5, s=20, color="#1f77b4")
-    lims = [min(valid[var09].min(), valid[var11].min()),
-            max(valid[var09].max(), valid[var11].max())]
-    ax.plot(lims, lims, 'k--', alpha=0.3, linewidth=1)
-    ax.set_xlabel(f"{label}\n(Jan-Jun 2009)", fontsize=10)
-    ax.set_ylabel(f"{label}\n(Full-year 2011)", fontsize=10)
-    ax.set_title(f"{label}", fontsize=11)
-    ax.text(0.05, 0.92,
-            f"Pearson r = {res['pearson_r']:.3f}\nSpearman $\\rho$ = {res['spearman_rho']:.3f}",
-            transform=ax.transAxes, fontsize=9, va="top",
-            bbox=dict(boxstyle="round,pad=0.3", facecolor="white", alpha=0.8))
-
-fig3.suptitle("Treatment Variable Correlation: 2009 vs 2011", fontsize=12, y=1.02)
-fig3.tight_layout()
-path3 = os.path.join(FIG_DIR, "treatment_correlation_2009_2011.png")
-fig3.savefig(path3, dpi=300, bbox_inches="tight")
-print(f"Saved to {path3}")
-plt.close(fig3)
+# The 2009-vs-2011 scatter figure was cut from the paper: the appendix argues from
+# the sign flip of the estimated effect, not from the magnitude of this correlation.
+# The correlations are still computed and exported to CSV above, which is what the
+# appendix cites; no figure is written.
 
 print("\n" + "=" * 80)
 print("DONE: Anticipation robustness analysis complete.")

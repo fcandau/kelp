@@ -49,10 +49,14 @@ raw["yq"] = raw["year"].astype(str) + "_" + raw["quarter"].astype(str)
 raw = raw.drop_duplicates(subset=["cell_id", "yq"]).copy()
 
 EXP_C11, EXP_D11 = "ln_mean_count_2011_20km", "ln_mean_length_2011_20km"
-df11 = raw.dropna(subset=[EXP_C11]).copy()
+# Same cells as the 2011 kelp tables (Table 2, event study): non-missing 2011
+# exposure and wave height, and positive kelp at least once (PPML drops the
+# all-zero cells). 127 cells, 6,000 cell-quarters.
+df11 = raw.dropna(subset=[EXP_C11, "ln_swh_mean"]).copy()
 KELP_POS = set(df11.groupby("cell_id")["biomass_sum"].max().pipe(lambda s: s[s > 0]).index)
+df11 = df11[df11["cell_id"].isin(KELP_POS)].copy()
 cell = df11.groupby("cell_id").first().reset_index()
-print(f"[2011 sample] {cell['cell_id'].nunique()} cells; kelp-positive: {len(KELP_POS)}")
+print(f"[2011 sample] {cell['cell_id'].nunique()} cells, {len(df11)} cell-quarters")
 
 
 # ---- (1) Quartile pre/post ABSOLUTE means -------------------------------------
@@ -118,8 +122,8 @@ for out, exp, tag in [("traffic_count", "exp_count", "count"),
     lc, ls, lp, pc, ps, pp, lN, pN, nc = dids(out, exp, KELP_POS)
     print(f"  {tag:5s}: LEVELS {lc:+.3f} ({ls:.3f}){stars(lp):3s}  |  "
           f"PROP {pc:+.4f} ({ps:.4f}){stars(pp):3s}  [cells={nc}, N_lev={lN}, N_prop={pN}]")
-    records.append({"measure": tag, "levels_coef": lc, "levels_p": lp,
-                    "prop_coef": pc, "prop_p": pp, "cells": nc,
+    records.append({"measure": tag, "levels_coef": lc, "levels_se": ls, "levels_p": lp,
+                    "prop_coef": pc, "prop_se": ps, "prop_p": pp, "cells": nc,
                     "n_levels": lN, "n_prop": pN})
 pd.DataFrame(records).to_csv(os.path.join(CSV_DIR, "verify_traffic_2011.csv"), index=False)
 

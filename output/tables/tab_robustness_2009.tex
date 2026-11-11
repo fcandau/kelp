@@ -1,0 +1,42 @@
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{4}{c}c}
+\hline\hline
+ &\multicolumn{2}{c}{Distance Traveled}&\multicolumn{2}{c}{Vessel Count}&\\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+ &Biomass&Area&Biomass&Area&Obs.\\
+\hline
+\multicolumn{6}{l}{\emph{Panel A: Main specification}}\\
+Baseline & 0.136\sym{***} & 0.132\sym{***} & 0.155\sym{***} & 0.149\sym{***} & 3880\\
+ & (0.036) & (0.035) & (0.043) & (0.042) & \\
+[0.4em]
+\multicolumn{6}{l}{\emph{Panel B: Recovery of depleted kelp stands}}\\
++ ln(baseline kelp) $\times$ post & 0.103\sym{***} & 0.099\sym{***} & 0.114\sym{***} & 0.109\sym{***} & 3880\\
+ & (0.038) & (0.037) & (0.043) & (0.042) & \\
++ baseline-kelp quartile $\times$ post & 0.122\sym{***} & 0.118\sym{***} & 0.136\sym{***} & 0.130\sym{***} & 3880\\
+ & (0.040) & (0.039) & (0.047) & (0.046) & \\
++ ln(baseline kelp) $\times$ trend & 0.121\sym{***} & 0.117\sym{***} & 0.135\sym{***} & 0.130\sym{***} & 3880\\
+ & (0.036) & (0.035) & (0.042) & (0.041) & \\
++ ln(baseline kelp) $\times$ year effects & 0.084\sym{**} & 0.080\sym{**} & 0.095\sym{**} & 0.090\sym{**} & 3880\\
+ & (0.037) & (0.036) & (0.042) & (0.041) & \\
+High-baseline cells only & 0.129\sym{***} & 0.124\sym{***} & 0.145\sym{***} & 0.139\sym{***} & 1920\\
+ & (0.038) & (0.038) & (0.046) & (0.045) & \\
+Low-baseline cells only & 0.014\sym{} & 0.012\sym{} & 0.026\sym{} & 0.023\sym{} & 1960\\
+ & (0.104) & (0.104) & (0.112) & (0.112) & \\
+[0.4em]
+\multicolumn{6}{l}{\emph{Panel C: Financial crisis and 2011 boundary modification}}\\
++ port activity (NBIC arrivals) & 0.136\sym{***} & 0.132\sym{***} & 0.152\sym{***} & 0.146\sym{***} & 3880\\
+ & (0.036) & (0.035) & (0.043) & (0.043) & \\
+Pre-2011 window (2005--2011) & 0.123\sym{***} & 0.122\sym{***} & 0.137\sym{***} & 0.135\sym{***} & 2268\\
+ & (0.041) & (0.041) & (0.050) & (0.050) & \\
+[0.4em]
+\multicolumn{6}{l}{\emph{Panel D: Weighting}}\\
+Weighted by log vessel count & 0.135\sym{***} & 0.131\sym{***} & 0.152\sym{***} & 0.146\sym{***} & 3880\\
+ & (0.037) & (0.037) & (0.045) & (0.044) & \\
+Weighted by pre-period kelp biomass & 0.103\sym{***} & 0.100\sym{***} & 0.124\sym{***} & 0.120\sym{***} & 3736\\
+ & (0.030) & (0.029) & (0.038) & (0.036) & \\
+[0.4em]
+\multicolumn{6}{l}{\emph{Panel E: Placebo}}\\
+Fake treatment date 2007Q3 (2005--2008) & -0.075\sym{} & -0.069\sym{} & -0.086\sym{} & -0.080\sym{} & 1248\\
+ & (0.067) & (0.067) & (0.075) & (0.075) & \\
+\hline\hline
+\end{tabular}
