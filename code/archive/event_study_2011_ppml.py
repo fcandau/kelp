@@ -36,7 +36,7 @@ from scipy import stats as scipy_stats
 import warnings
 warnings.filterwarnings("ignore")
 
-BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # code/archive -> project root
 GENERATED = os.path.join(BASE, "data", "generated")
 TABLES_DIR = os.path.join(BASE, "output", "tables")
 CSV_DIR = os.path.join(BASE, "output", "csv")

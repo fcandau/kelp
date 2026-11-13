@@ -30,7 +30,7 @@ import pyfixest as pf
 import warnings
 warnings.filterwarnings("ignore")
 
-BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # code/archive -> project root
 GENERATED = os.path.join(BASE, "data", "generated")
 CSV_DIR = os.path.join(BASE, "output", "csv")
 os.makedirs(CSV_DIR, exist_ok=True)

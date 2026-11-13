@@ -11,7 +11,7 @@
     2_c_anticipation.py    → Anticipation robustness (temporal stability, alt timing)
     2_e_weighting_robustness.py → Weighting diagnostic figure + table
     3_estim2011.do         → 2011 boundary modification PPML tables (Stata)
-    event_study_2011_ppml.py → PPML event study table for 2011 (Python)
+    (archive\event_study_2011_ppml.py, 2011 event study: removed from the paper 2026-11-13, not run)
     4_balance_table.py     → Balance table by treatment quartile
     5_financial_crisis.py  → Financial crisis robustness table + figure
 ==============================================================================*/
@@ -148,14 +148,10 @@ di as txt "============================================"
 di as txt "  Step 4: 2011 event study (event_study_2011_ppml.py)"
 di as txt "============================================"
 
-shell "$python" "$code\event_study_2011_ppml.py"
-
-cap confirm file "$output\tables\tab_es_2011.tex"
-if _rc {
-    di as error "ERROR: tab_es_2011.tex not found. Step 4 failed."
-    error 601
-}
-di as txt "Step 4 complete."
+* Removed from the paper on 2026-11-13 (subsection "Dynamic effects" of the 2011 section).
+* The script is kept in code\archive and still runs; uncomment to rebuild the table.
+* shell "$python" "$code\archive\event_study_2011_ppml.py"
+di as txt "Step 4 skipped (2011 event study archived)."
 
 
 * ==============================================================================
