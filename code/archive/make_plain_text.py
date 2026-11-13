@@ -25,11 +25,13 @@ def is_prose(l):
     s = l.strip()
     if s in HEADS:
         return True
-    if len(s) < 200:                     # table rows, captions, equation fragments, short labels
+    if len(s) < 60 or not s.endswith("."):          # equation fragments, short labels
         return False
+    if not (s[0].isupper() or s[0].isdigit()) or "|" in s or s.startswith(("+", ":", "^")):
+        return False                                # table rows and captions
     if s.startswith(("Notes:", "Note:", "This figure", "Unweighted PPML", "PPML estimates", "Cell-quarter")):
-        return False                     # table and figure notes
-    return s.count(". ") >= 1
+        return False                                # table and figure notes
+    return True
 
 
 def clean(s):
@@ -37,9 +39,11 @@ def clean(s):
     s = s.replace("); (", "; ")                                     # (A 2020); (B 2021) -> (A 2020; B 2021)
     s = re.sub(r"\(\(([A-Z])", lambda m: "(" + m.group(1), s)       # ((Dayton 1985)) -> (Dayton 1985)
     s = re.sub(r"(\d{4}[a-z]?)\)\)", lambda m: m.group(1) + ")", s)
-    s = s.replace("([eq:cdid])", "(1)").replace("([eq:cdid2011])", "(2)")
+    s = s.replace("([eq:cdid])", "(1)").replace("([eq:es])", "(2)").replace("([eq:cdid2011])", "(3)")
     s = re.sub(r"\(e\.g\., \(([^()]*)\)", lambda m: "(e.g., " + m.group(1) + ")", s)
     s = re.sub(r"\((see also|see) \(([^()]*)\)", lambda m: "(" + m.group(1) + " " + m.group(2) + ")", s)
+    s = re.sub(r"\bsee \(([^()]*\d{4}[a-z]?)\)", lambda m: "see " + m.group(1), s)  # ", see (A 2022)" inside parentheses
+    s = s.replace("(PPML; (Santos Silva and Tenreyro 2006)", "(PPML; Santos Silva and Tenreyro 2006)")
     s = re.sub(r"[ \t]+", " ", s).strip()
     return s
 
@@ -54,7 +58,7 @@ a = a.replace(" JEL: Q57, R41, F18", "")
 out += ["=== ABSTRACT ===", "", a, ""]
 
 for l in L:
-    if not is_prose(l):
+    if not is_prose(clean(l)):
         continue
     s = clean(l)
     if s in HEADS:
