@@ -42,7 +42,7 @@ def clean(s):
     s = s.replace("([eq:cdid])", "(1)").replace("([eq:es])", "(2)").replace("([eq:cdid2011])", "(3)")
     s = re.sub(r"\(e\.g\., \(([^()]*)\)", lambda m: "(e.g., " + m.group(1) + ")", s)
     s = re.sub(r"\((see also|see) \(([^()]*)\)", lambda m: "(" + m.group(1) + " " + m.group(2) + ")", s)
-    s = re.sub(r"\bsee \(([^()]*\d{4}[a-z]?)\)", lambda m: "see " + m.group(1), s)  # ", see (A 2022)" inside parentheses
+    s = re.sub(r"\bsee \(([^()]*\d{4}[a-z]?)\)", lambda m: "see " + m.group(1) + ")", s)  # "(…, see (A 2022)) with" after the "))" collapse
     s = s.replace("(PPML; (Santos Silva and Tenreyro 2006)", "(PPML; Santos Silva and Tenreyro 2006)")
     s = re.sub(r"[ \t]+", " ", s).strip()
     return s
